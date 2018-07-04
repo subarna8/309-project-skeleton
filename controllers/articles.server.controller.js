@@ -33,7 +33,7 @@ module.exports.all = function(req, res) {
     }).populate('postedBy', '_id username');
 };
 
-module.exports.create = function(req, res) {
+/*module.exports.create = function(req, res) {
   var article = new Article(req.body);
   article.postedBy = req.user;
   article.save(function(err, data) {
@@ -46,7 +46,21 @@ module.exports.create = function(req, res) {
       res.status(200).send(data);
     }
   });
+};*/
+module.exports.create = function(req, res) {
+  var article = new Article(req.body);
+  article.postedBy = req.user;
+  article.save(function(err, data) {
+    if (err) {
+      return res.status(400).send({
+           message: errorHandler.getErrorMessage(err)
+         });
+    } else {
+      res.status(200).send(data);
+    }
+  });
 };
+
 
 module.exports.read = function(req, res) {
   res.json(req.article);
@@ -79,11 +93,43 @@ module.exports.update = function(req, res) {
   	});
 };
 
-exports.articleByID = function(req, res, next, id) {
+/*exports.articleByID = function(req, res, next, id) {
 	Article.findById(id).populate('postedBy', 'username').exec(function(err, article) {
 		if (err) return next(err);
 		if (!article) return next(new Error('Failed to load article ' + id));
 		req.article = article;
 		next();
 	});
+};*/
+exports.articleByID = function(req, res, next, id) {
+   Article.findById(id)
+     .populate('postedBy', 'username')
+     .exec(function(err, article) {
+		    if (err) return next(err);
+		    if (!article) 
+                return next(new Error('Failed to load article ' + id));
+               req.article = article;
+               next();
+          });
 };
+
+
+
+
+
+module.exports.single = function(req, res) {
+   res.render('./../public/views/article/view.ejs', {
+          user: req.user || null,
+          article: req.article
+    });
+    
+};
+
+module.exports.new = function(req, res){
+  res.render('./../public/views/article/new.ejs', {
+          user: req.user || null,
+          request: req
+        });
+};
+
+
