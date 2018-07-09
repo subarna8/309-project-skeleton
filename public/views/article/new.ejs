@@ -1,27 +1,22 @@
 <% include ../partials/header.ejs %>
 <div class="container">
-    <h1>New Article</h1>
+    	           <h1>New Article</h1>
   	<p>Title:</p>
   	<input type="text" id="title"/><br/><br/>
   	<p>Author:</p>
   	<input type="text" id="author"/><br/><br/>
   	<p>Link:</p>
   	<input type="text" id="link"/><br/><br/>
+
   	<p>Summary</p>
-  	
   	<textarea id="summary">Add summary </textarea><br/><br/>
-  	<input type="number" id="rating" max="5" min= "0" /><br/><br/>
+  	  	<p>Rating:</p>
+  	<input type="number" id="rating" min="0" max= "5"/><br/><br/>
   	<button id="submit">Submit</button>
   	<div id="error"></div>
-                         
-    <form>
-  First name:<br>
-  <input type="text" name="firstname"><br>
-  Last name:<br>
-  <input type="text" name="lastname">
-</form>	                            
+       
+    	                            
 </div>
-
 <script src="/lib/jquery/dist/jquery.min.js"></script>
 <script>
 var newArticle = {title:"", author:"", link:"", summary:""};
@@ -31,8 +26,8 @@ var newArticle = {title:"", author:"", link:"", summary:""};
     	newArticle.link = $('#link').val();
     	newArticle.summary = $('#summary').val();
     	newArticle.rating = $('#rating').val();
-    	
-    	$.ajax({
+          
+          $.ajax({
     	method: "POST",
     	url: "/api/articles",
 data: newArticle
@@ -43,7 +38,6 @@ console.log(response);
 $("#error").text(JSON.parse(response.responseText).message);
 });
 });
-
-                                                                                                                
+                                                                                                    
 </script>
 <% include ../partials/footer.ejs %>
